@@ -5,7 +5,7 @@ import os
 DEFAULT_CNUM = 16
 DEFAULT_NUM_RENDERS = max(1, len(os.sched_getaffinity(0))//2)
 
-from .__main__ import cli  # noqa
+from .cli import cli, plot_parameters  # noqa
 
 # create logger with 'spam_application'
 log = logging.getLogger('shadems')
