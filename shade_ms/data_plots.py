@@ -269,6 +269,7 @@ def compute_bounds(unknowns, bounds, ddf):
 
 def create_plot(ddf, index_subsets, xdatum, ydatum, adatum, ared, cdatum, cmap, bmap, dmap, normalize,
                 xlabel, ylabel, title, pngname,
+                extra_markup=[],
                 min_alpha=40, saturate_percentile=None, saturate_alpha=None,
                 minmax_cache=None,
                 options=None):
@@ -343,7 +344,7 @@ def create_plot(ddf, index_subsets, xdatum, ydatum, adatum, ared, cdatum, cmap, 
                 else:
                     active_subset = OrderedDict(enumerate(map(str, range(bounds[caxis][1]+1))))
                 # Check if the subset needs to be refined, because it is known to be smaller for this dataframe
-                if cdatum.columns[0] in index_subsets and len(cdatum.columns) == 1:
+                if len(cdatum.columns) == 1 and cdatum.columns[0] in index_subsets:
                     df_index_subset = index_subsets[cdatum.columns[0]]
                     if cdatum.subset_remapper is not None:
                         remapper = cdatum.subset_remapper.compute()
@@ -475,6 +476,10 @@ def create_plot(ddf, index_subsets, xdatum, ydatum, adatum, ared, cdatum, cmap, 
 
     fig = pylab.figure(figsize=(figx, figy))
     ax = fig.add_subplot(111, facecolor=bgcol)
+
+    for funcname, args, kwargs in extra_markup:
+        getattr(ax, funcname)(*args, **kwargs)
+
     ax.imshow(X=rgb.data, extent=[xmin, xmax, ymin, ymax],
               aspect='auto', origin='lower', interpolation='nearest')
 
